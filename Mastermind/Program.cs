@@ -33,7 +33,7 @@ namespace Mastermind{
                 nmbstoint = int.Parse(nmbs);
                 if (nmbstoint >= 3 && nmbstoint <= 10){
                     //combination generation
-                    var chars = "0123456789";
+                    var chars = "123456789";
                     stringchars = new char[nmbstoint];
                     Random rand = new Random();
                     for (int i = 0; i < stringchars.Length; i++)
@@ -58,9 +58,8 @@ namespace Mastermind{
             int tries = 9;
 
             while(playing){
-                Console.WriteLine("Please enter "+ nmbstoint +" digits\nYou currently have "+tries+" lives left!\n");
+                Console.WriteLine("\n\nPlease enter "+ nmbstoint +" digits\nYou currently have "+tries+" lives left!\n");
                 string input = Console.ReadLine();
-
                 //first line of error checking. Making sure the input is only 4 numbers
                 if (input.Length != nmbstoint){
                     Console.WriteLine("Input was not valid!\n");
@@ -69,7 +68,7 @@ namespace Mastermind{
                 else
                     validinput = true;
 
-                //if the input length is 4, continue
+                //if the input length is nmbstoint, continue
                 if (validinput){
                     try{
 
@@ -79,26 +78,37 @@ namespace Mastermind{
                         //converting our input back to string then chararray
                         char[] intarray = toints.ToString().ToCharArray();
                         int x = 0;
-                        StringBuilder sb = new StringBuilder("Correct numbers in your guess: ");
-                        StringWriter sw = new StringWriter(sb);
+                        StringBuilder sbcorrect = new StringBuilder("Correct combination in your guess: ");
+                        StringWriter swcorrect = new StringWriter(sbcorrect);
+
+                        StringWriter sw = new StringWriter();
+                        string result = "";
 
                         //going through each char that was created in the beginning and comparing them with user input
                         foreach (char ch in stringchars){
                             if (ch == intarray[x]){
                                 Console.WriteLine(intarray[x] + " Was correct!");
-                                sw.Write(intarray[x]);
+                                swcorrect.Write(intarray[x]);
                             }
                             else if (ch != intarray[x]){
                                 Console.WriteLine(intarray[x] + " Was not correct!");
-                                sw.Write("x");
+                                swcorrect.Write("x");
+                            }
+                            if(stringchars.Contains(intarray[x]))
+                            {
+                                sw.Write(intarray[x]);
+                                string unique = sw.ToString();
+                                var uniquearray = unique.ToCharArray().Distinct().ToArray();
+                                result = new string(uniquearray);
                             }
                             x++;
                         }
-                        Console.WriteLine(sb);
+                        Console.WriteLine(sbcorrect);
+                        Console.WriteLine("Numbers in the combination that were correct: "+result);
 
                         //creating a bool that is true if both arrays are the same
                         bool equal = stringchars.SequenceEqual(intarray);
-                        Console.WriteLine("Input {0} equal", equal ? "are" : "are not");
+                        //Console.WriteLine("Input {0} equal", equal ? "are" : "are not");
 
                         //if arrays are equal, end game
                         if (equal == true){
@@ -117,7 +127,8 @@ namespace Mastermind{
                     }
 
                     //error handling for the parsing, just to make sure it only contained numbers
-                    catch{
+                    catch(Exception ex){
+                        Console.WriteLine(ex);
                         Console.WriteLine("Input was not valid!");
                         continue;
                     }
