@@ -7,6 +7,7 @@ namespace Mastermind{
 
     class Program{
 
+        //variables that is used betweens methods
         public static int nmbstoint = 0;
         public static char[] stringchars;
 
@@ -17,15 +18,17 @@ namespace Mastermind{
             if (input.ToLower() == "y")
                 settings();
 
+            //if user doesn't wanna play, commit suduku
             else if (input.ToLower() == "n")
                 Environment.Exit(1);
-
+            
+            //if the input is anything else than y/n, rerun the program
             else
                 Main();
         }
 
-        static void settings()
-        {
+        //settings for the game. Might add more options later but CBA...
+        static void settings(){
             Console.Clear();
             Console.WriteLine("How many numbers do you want? (min 3, max 10!)");
             string nmbs = Console.ReadLine();
@@ -51,14 +54,16 @@ namespace Mastermind{
             }
         }
 
+        //game logic
         static void Game(){
             Console.Clear();
             bool playing = true;
             bool validinput;
-            int tries = 9;
+            int lives = 9;
 
+            //run the game in a loop so it doesn't end unless user wins or runs out of lives
             while(playing){
-                Console.WriteLine("\n\nPlease enter "+ nmbstoint +" digits\nYou currently have "+tries+" lives left!\n");
+                Console.WriteLine("\n\nPlease enter "+ nmbstoint +" digits\nYou currently have "+lives+" lives left!\n");
                 string input = Console.ReadLine();
                 //first line of error checking. Making sure the input is only 4 numbers
                 if (input.Length != nmbstoint){
@@ -71,16 +76,18 @@ namespace Mastermind{
                 //if the input length is nmbstoint, continue
                 if (validinput){
                     try{
-
                         //checking to see if input is just numbers
                         int toints = int.Parse(input);
 
                         //converting our input back to string then chararray
                         char[] intarray = toints.ToString().ToCharArray();
+
+                        //int x for counting in our char array
                         int x = 0;
+
+                        //easier way of writing chars to a string
                         StringBuilder sbcorrect = new StringBuilder("Correct combination in your guess: ");
                         StringWriter swcorrect = new StringWriter(sbcorrect);
-
                         StringWriter sw = new StringWriter();
                         string result = "";
 
@@ -94,8 +101,9 @@ namespace Mastermind{
                                 Console.WriteLine(intarray[x] + " Was not correct!");
                                 swcorrect.Write("x");
                             }
-                            if(stringchars.Contains(intarray[x]))
-                            {
+                            //if our generated combination contains one of the numbers that the user typed, write it to a string, convert string to array
+                            //remove duplicates and convert back to string
+                            if(stringchars.Contains(intarray[x])){
                                 sw.Write(intarray[x]);
                                 string unique = sw.ToString();
                                 var uniquearray = unique.ToCharArray().Distinct().ToArray();
@@ -118,17 +126,15 @@ namespace Mastermind{
                         }
 
                         //subtracting a try each time, if you run out of tries, end game.
-                        tries--;
-                        if (tries == 0){
+                        lives--;
+                        if (lives == 0){
                             playing = false;
                             Console.WriteLine("You ran out of lives!");
                             Console.ReadLine();
                         }
                     }
-
                     //error handling for the parsing, just to make sure it only contained numbers
-                    catch(Exception ex){
-                        Console.WriteLine(ex);
+                    catch{
                         Console.WriteLine("Input was not valid!");
                         continue;
                     }
