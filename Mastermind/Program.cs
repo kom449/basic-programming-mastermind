@@ -50,7 +50,9 @@ namespace Mastermind{
                 }
             }
             catch{
-                Console.WriteLine("Invalid input!");
+                Console.WriteLine("Invalid input!\nPress enter to try again");
+                Console.ReadLine();
+                settings();
             }
         }
 
@@ -63,7 +65,7 @@ namespace Mastermind{
 
             //run the game in a loop so it doesn't end unless user wins or runs out of lives
             while(playing){
-                Console.WriteLine("\n\nPlease enter "+ nmbstoint +" digits\nYou currently have "+lives+" lives left!\n");
+                Console.WriteLine("Please enter "+ nmbstoint +" digits\nYou currently have "+lives+" lives left!");
                 string input = Console.ReadLine();
                 //first line of error checking. Making sure the input is only 4 numbers
                 if (input.Length != nmbstoint){
@@ -94,11 +96,11 @@ namespace Mastermind{
                         //going through each char that was created in the beginning and comparing them with user input
                         foreach (char ch in stringchars){
                             if (ch == intarray[x]){
-                                Console.WriteLine(intarray[x] + " Was correct!");
+                                //Console.WriteLine(intarray[x] + " Was correct!");
                                 swcorrect.Write(intarray[x]);
                             }
                             else if (ch != intarray[x]){
-                                Console.WriteLine(intarray[x] + " Was not correct!");
+                                //Console.WriteLine(intarray[x] + " Was not correct!");
                                 swcorrect.Write("x");
                             }
                             //if our generated combination contains one of the numbers that the user typed, write it to a string, convert string to array
@@ -112,7 +114,7 @@ namespace Mastermind{
                             x++;
                         }
                         Console.WriteLine(sbcorrect);
-                        Console.WriteLine("Numbers in the combination that were correct: "+result);
+                        Console.WriteLine("Numbers in the combination that were correct: "+result+"\n\n");
 
                         //creating a bool that is true if both arrays are the same
                         bool equal = stringchars.SequenceEqual(intarray);
@@ -121,8 +123,8 @@ namespace Mastermind{
                         //if arrays are equal, end game
                         if (equal == true){
                             playing = false;
-                            Console.WriteLine("You found the correct answer!\nYou have won the game!");
-                            Console.ReadLine();
+                            Console.Clear();
+                            Console.WriteLine(sbcorrect+"\nYou found the correct answer!\nYou have won the game with "+lives+" lives left!\n\nDo you wanna play again?");
                         }
 
                         //subtracting a try each time, if you run out of tries, end game.
@@ -140,6 +142,14 @@ namespace Mastermind{
                     }
                 }             
             }
+            string answer = Console.ReadLine();
+            if (answer.ToLower() == "y")
+                settings();
+            else if (answer.ToLower() == "n")
+                Environment.Exit(1);
+            else
+                Main();
+
         }
     }
 }
