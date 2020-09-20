@@ -46,7 +46,7 @@ namespace Mastermind{
                     settings();
                 }
             }
-            catch (Exception){
+            catch{
                 Console.WriteLine("Invalid input!");
             }
         }
@@ -117,8 +117,7 @@ namespace Mastermind{
                     }
 
                     //error handling for the parsing, just to make sure it only contained numbers
-                    catch (Exception ex){
-                        //Console.WriteLine(ex);
+                    catch{
                         Console.WriteLine("Input was not valid!");
                         continue;
                     }
