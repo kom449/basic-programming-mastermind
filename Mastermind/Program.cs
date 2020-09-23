@@ -3,9 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Mastermind{
+namespace Mastermind
+{
 
-    class Program{
+    public class Program{
 
         //variables that is used betweens methods
         public static int nmbstoint = 0;
@@ -28,7 +29,7 @@ namespace Mastermind{
         }
 
         //settings for the game. Might add more options later but CBA...
-        static void settings(){
+        public static void settings(){
             Console.Clear();
             Console.WriteLine("How many numbers do you want? (min 3, max 10!)");
             string nmbs = Console.ReadLine();
@@ -36,11 +37,7 @@ namespace Mastermind{
                 nmbstoint = int.Parse(nmbs);
                 if (nmbstoint >= 3 && nmbstoint <= 10){
                     //combination generation
-                    var chars = "123456789";
-                    stringchars = new char[nmbstoint];
-                    Random rand = new Random();
-                    for (int i = 0; i < stringchars.Length; i++)
-                        stringchars[i] = chars[rand.Next(chars.Length)];                   
+                    stringchars = Combination(nmbstoint);
                     Game();
                 }
                 else{
@@ -67,9 +64,9 @@ namespace Mastermind{
             while(playing){
                 Console.WriteLine("Please enter "+ nmbstoint +" digits\nYou currently have "+lives+" lives left!");
                 string input = Console.ReadLine();
-                //first line of error checking. Making sure the input is only 4 numbers
+                //first line of error checking. Making sure the input is only equal to the amount entered
                 if (input.Length != nmbstoint){
-                    Console.WriteLine("Input was not valid!\n");
+                    Console.WriteLine("Input had more or less numbers than specified!\n");
                     validinput = false;
                 }
                 else
@@ -124,7 +121,7 @@ namespace Mastermind{
                         if (equal == true){
                             playing = false;
                             Console.Clear();
-                            Console.WriteLine(sbcorrect+"\nYou found the correct answer!\nYou have won the game with "+lives+" lives left!\n\nDo you wanna play again?");
+                            Console.WriteLine(sbcorrect+"\nYou found the correct answer!\nYou have won the game with "+lives+ " lives left!\n\n");
                         }
 
                         //subtracting a try each time, if you run out of tries, end game.
@@ -132,16 +129,17 @@ namespace Mastermind{
                         if (lives == 0){
                             playing = false;
                             Console.WriteLine("You ran out of lives!");
-                            Console.ReadLine();
                         }
                     }
                     //error handling for the parsing, just to make sure it only contained numbers
                     catch{
-                        Console.WriteLine("Input was not valid!");
+                        Console.WriteLine("Input contained letters and not just numbers!");
                         continue;
                     }
                 }             
             }
+            //end of game stuff - Asking if player wants to play again or quit
+            Console.WriteLine("Do you wanna play again?\n\nY/N");
             string answer = Console.ReadLine();
             if (answer.ToLower() == "y")
                 settings();
@@ -149,7 +147,16 @@ namespace Mastermind{
                 Environment.Exit(1);
             else
                 Main();
+        }
 
+        public static char[] Combination(int a){
+            char[] stringchars;
+            var chars = "123456789";
+            stringchars = new char[a];
+            Random rand = new Random();
+            for (int i = 0; i < stringchars.Length; i++)
+                stringchars[i] = chars[rand.Next(chars.Length)];
+            return stringchars;
         }
     }
 }
